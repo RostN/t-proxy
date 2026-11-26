@@ -26,11 +26,14 @@ async function fetchLinksFromSheet() {
       // Оператор ?. защищает от ошибки, если ячейка A пока пустая
       const title = row.c[0]?.v || ''; 
       const link = row.c[1]?.v || '';
+      // Превращает 'https://t.me...' в 'tg://proxy?server=...'
+      const directTgLink = link.replace(/^https?:\/\/t\.me\//i, 'tg://');
+
 
       // Добавляем в список только те строки, где в колонке B есть ссылка
       if (link && String(link).startsWith('http')) {
         cardTitle.textContent = title;
-        cardLink.href = link;
+        cardLink.href = directTgLink;
         result.push({
           title: String(title),
           link: String(link)
